@@ -675,7 +675,8 @@ void AP_Arming_Copter::set_pre_arm_check(bool b)
 bool AP_Arming_Copter::arm(const AP_Arming::Method method, const bool do_arming_checks)
 {
     static bool in_arm_motors = false;
-
+    gcs().send_text(MAV_SEVERITY_INFO, "ARMED BY EKT");
+    
     // exit immediately if already in this function
     if (in_arm_motors) {
         return false;
