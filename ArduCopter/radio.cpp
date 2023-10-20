@@ -87,6 +87,11 @@ void Copter::read_radio()
         set_throttle_and_failsafe(channel_throttle->get_radio_in());
         set_throttle_zero_flag(channel_throttle->get_control_in());
 
+        //set_throttle_and_failsafe(uint16_t throttle_pwm)
+        //set_throttle_zero_flag(int16_t throttle_control)
+        gcs().send_text(MAV_SEVERITY_INFO, "throttle_pwm: %d", channel_throttle->get_radio_in());
+        gcs().send_text(MAV_SEVERITY_INFO, "throttle_control: %d", channel_throttle->get_control_in());
+
         // RC receiver must be attached if we've just got input
         ap.rc_receiver_present = true;
 
