@@ -5366,7 +5366,7 @@ void GCS_MAVLINK::send_attitude() const
         omega.z);
 
     // test edildi attitude mesajı gönderilen bu alttakini yorumdan kaldırırsak aynı anda 2 attitude ömesajı gönderir
-    mavlink_msg_attitude_send(chan, AP_HAL::millis(), ahrs.roll, ahrs.pitch, ahrs.yaw, omega.x, omega.y, omega.z);
+    //mavlink_msg_attitude_send(chan, AP_HAL::millis(), ahrs.roll, ahrs.pitch, ahrs.yaw, omega.x, omega.y, omega.z);
 }
 
 void GCS_MAVLINK::send_attitude_quaternion() const
