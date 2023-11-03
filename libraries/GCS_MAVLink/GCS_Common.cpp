@@ -356,6 +356,11 @@ void GCS_MAVLINK::send_battery_status(const uint8_t instance) const
                                     cell_mvolts_ext, // Cell 11..14 voltages
                                     0, // battery mode
                                     battery.get_mavlink_fault_bitmask(instance));   // fault_bitmask
+
+    gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  battery temparature: %d, battery miliVolt: %f", ((int16_t)(temp * 100)), (battery.gcs_voltage(instance) * 1e3f));
+    gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  cell volts: %d, %d, %d", cell_mvolts[0], cell_mvolts[1], cell_mvolts[2]);      
+    gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  current(cA): %f, consumed miliampere hour: %f", current, consumed_mah); 
+    gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  consumed energy wh: %f, remaining time: %ld", consumed_wh, time_remaining);  
 }
 
 // returns true if all battery instances were reported
