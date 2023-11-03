@@ -361,12 +361,12 @@ void GCS_MAVLINK::send_battery_status(const uint8_t instance) const
       ///  BATTERY_STATUS {id : 0, battery_function : 0, type : 0, temperature : 32767, voltages : [14867, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535], current_battery : 11, current_consumed : 1, energy_consumed : 0, battery_remaining : 99, time_remaining : 0, charge_state : 1, voltages_ext : [0, 0, 0, 0], mode : 0, fault_bitmask : 0}         
       // temperature inside mavlink message take max value uint16 type
                     
-     gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  battery remaining percentage: %d", constrain_int16(percentage, -1, 100));                               
-     gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  battery temparature: %d, battery miliVolt: %f", ((int16_t)(temp * 100)), (battery.gcs_voltage(instance) * 1e3f));
-     gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  cell volts[0 4]: %d, %d, %d, %d, %d", cell_mvolts[0], cell_mvolts[1], cell_mvolts[2], cell_mvolts[3], cell_mvolts[4]); 
-     gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  cell volts[5 9]: %d, %d, %d, %d, %d", cell_mvolts[5], cell_mvolts[6], cell_mvolts[7], cell_mvolts[8], cell_mvolts[9]);         
-     gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  current(centiAmp): %f, consumed miliampere hour: %f", current, consumed_mah); 
-     gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  consumed energy wh: %f, remaining time: %ld", consumed_wh, time_remaining);  
+     //gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  battery remaining percentage: %d", constrain_int16(percentage, -1, 100));                               
+     //gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  battery temparature: %d, battery miliVolt: %f", ((int16_t)(temp * 100)), (battery.gcs_voltage(instance) * 1e3f));
+     //gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  cell volts[0 4]: %d, %d, %d, %d, %d", cell_mvolts[0], cell_mvolts[1], cell_mvolts[2], cell_mvolts[3], cell_mvolts[4]); 
+     //gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  cell volts[5 9]: %d, %d, %d, %d, %d", cell_mvolts[5], cell_mvolts[6], cell_mvolts[7], cell_mvolts[8], cell_mvolts[9]);         
+     //gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  current(centiAmp): %f, consumed miliampere hour: %f", current, consumed_mah); 
+     //gcs().send_text(MAV_SEVERITY_INFO, "BATTERY STATUS --->>>  consumed energy wh: %f, remaining time: %ld", consumed_wh, time_remaining);  
 }
 
 // returns true if all battery instances were reported
