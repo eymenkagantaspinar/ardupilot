@@ -80,7 +80,8 @@ void Copter::init_rc_out()
 void Copter::read_radio()
 {
     const uint32_t tnow_ms = millis();
-
+    //static int first = 1;
+    
     if (rc().read_input()) {
         ap.new_radio_frame = true;
 
@@ -89,8 +90,19 @@ void Copter::read_radio()
 
         //set_throttle_and_failsafe(uint16_t throttle_pwm)
         //set_throttle_zero_flag(int16_t throttle_control)
-        gcs().send_text(MAV_SEVERITY_INFO, "throttle_pwm: %d", channel_throttle->get_radio_in());
-        gcs().send_text(MAV_SEVERITY_INFO, "throttle_control: %d", channel_throttle->get_control_in());
+        //gcs().send_text(MAV_SEVERITY_INFO, "throttle_pwm: %d", channel_throttle->get_radio_in());
+        //gcs().send_text(MAV_SEVERITY_INFO, "throttle_control: %d", channel_throttle->get_control_in());
+
+        //if (first == 1){
+        //	gcs().send_text(MAV_SEVERITY_INFO, "Dead zone value of roll: %d, pitch: %d, yaw: %d, throttle: %d", channel_roll->get_dead_zone(), channel_pitch->get_dead_zone(), channel_yaw->get_dead_zone(), channel_throttle->get_dead_zone());
+        //	// set default dead zones
+        //  channel_roll->set_default_dead_zone(32);
+        //  channel_pitch->set_default_dead_zone(33);
+        //  channel_throttle->set_default_dead_zone(34);
+        //  channel_yaw->set_default_dead_zone(35);
+        //  gcs().send_text(MAV_SEVERITY_INFO, "Dead zone value of roll: %d, pitch: %d, yaw: %d, throttle: %d", channel_roll->get_dead_zone(), channel_pitch->get_dead_zone(), channel_yaw->get_dead_zone(), channel_throttle->get_dead_zone());
+        //  first += 1; 	
+        //}
 
         // RC receiver must be attached if we've just got input
         ap.rc_receiver_present = true;
