@@ -198,7 +198,8 @@ void Copter::radio_passthrough_to_motors()
                                   channel_pitch->norm_input(),
                                   channel_throttle->get_control_in_zero_dz()*0.001f,
                                   channel_yaw->norm_input());
-        gcs().send_text(MAV_SEVERITY_INFO, "pilot's inputs to motors roll: %f, pitch: %f, yaw: %f, throttle: %f", channel_roll->norm_input(), channel_pitch->norm_input(), channel_yaw->norm_input(), channel_throttle->get_control_in_zero_dz()*0.001f);
+    //gcs().send_text(MAV_SEVERITY_INFO, "pilot's inputs to motors roll: %f, pitch: %f, yaw: %f, throttle: %f", channel_roll->norm_input(), channel_pitch->norm_input(), channel_yaw->norm_input(), channel_throttle->get_control_in_zero_dz()*0.001f);
+    //gcs().send_text(MAV_SEVERITY_INFO, "pilot's inputs to motors roll: %d, pitch: %d, yaw: %d, throttle: %d", channel_roll->get_radio_in(), channel_pitch->get_radio_in(), channel_yaw->get_radio_in(), channel_throttle->get_radio_in());
 }
 
 /*
