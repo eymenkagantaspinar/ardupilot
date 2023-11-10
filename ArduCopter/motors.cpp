@@ -25,15 +25,16 @@ void Copter::arm_motors_check()
         return;
     }
 #endif
-
+    
+    //gcs().send_text(MAV_SEVERITY_INFO, "throttle_in: %d", channel_throttle->get_control_in()); 
     // ensure throttle is down
-    if (channel_throttle->get_control_in() > 0) {
+    if (channel_throttle->get_control_in() > 10) { //Throttle from RC may be slightly higher than 0, so arm disarm control cannot be performed. 0 replaced with 10
         arming_counter = 0;
         return;
-    }
-
+    }    
     int16_t yaw_in = channel_yaw->get_control_in();
-
+    //gcs().send_text(MAV_SEVERITY_INFO, "yaw_in: %d", yaw_in);
+    
     // full right
     if (yaw_in > 4000) {
 
