@@ -566,6 +566,7 @@ bool AP_Arming_Copter::alt_checks(bool display_failure)
 //  has side-effect that logging is started
 bool AP_Arming_Copter::arm_checks(AP_Arming::Method method)
 {
+    //return true;
     const auto &ahrs = AP::ahrs();
 
     // always check if inertial nav has started and is ready
