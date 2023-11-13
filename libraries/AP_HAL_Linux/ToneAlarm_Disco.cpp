@@ -40,8 +40,8 @@ void ToneAlarm_Disco::set_buzzer_tone(float frequency, float volume, uint32_t du
     if (is_zero(frequency) || is_zero(volume)) {
         bebop_out->play_note(0, 0, 0);
     } else {
-        bebop_out->play_note(0, 0, 0);
-        //bebop_out->play_note(TONEALARM_PWM_POWER, (uint16_t)roundf(frequency), duration_ms);
+        //bebop_out->play_note(0, 0, 0);
+        bebop_out->play_note(TONEALARM_PWM_POWER, (uint16_t)roundf(frequency), duration_ms);
     }
 }
 
