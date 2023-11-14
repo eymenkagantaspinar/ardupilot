@@ -206,10 +206,18 @@ void Copter::set_throttle_zero_flag(int16_t throttle_control)
 // pass pilot's inputs to motors library (used to allow wiggling servos while disarmed on heli, single, coax copters)
 void Copter::radio_passthrough_to_motors()
 {
+    //static int counter = 0;
     motors->set_radio_passthrough(channel_roll->norm_input(),
                                   channel_pitch->norm_input(),
                                   channel_throttle->get_control_in_zero_dz()*0.001f,
                                   channel_yaw->norm_input());
+    /*counter += 1;                               
+    if (counter % 100 == 0){
+    gcs().send_text(MAV_SEVERITY_INFO, "roll trim: %hu, roll min: %hu, roll in: %hu, roll max: %hu", channel_roll->get_radio_trim(), channel_roll->get_radio_min(), channel_roll->get_radio_in(), channel_roll->get_radio_max());            
+    gcs().send_text(MAV_SEVERITY_INFO, "pitch trim: %hu, pitch min: %hu, pitch in: %hu, pitch max: %hu", channel_pitch->get_radio_trim(), channel_pitch->get_radio_min(), channel_pitch->get_radio_in(), channel_pitch->get_radio_max());
+    gcs().send_text(MAV_SEVERITY_INFO, "yaw trim: %hu, yaw min: %hu, yaw in: %hu, yaw max: %hu", channel_yaw->get_radio_trim(), channel_yaw->get_radio_min(), channel_yaw->get_radio_in(), channel_yaw->get_radio_max());
+    gcs().send_text(MAV_SEVERITY_INFO, "throttle trim: %hu, throttle min: %hu, throttle in: %hu, throttle max: %hu", channel_throttle->get_radio_trim(), channel_throttle->get_radio_min(), channel_throttle->get_radio_in(), channel_throttle->get_radio_max()); 
+    } */        
     //gcs().send_text(MAV_SEVERITY_INFO, "pilot's inputs to motors roll: %f, pitch: %f, yaw: %f, throttle: %f", channel_roll->norm_input(), channel_pitch->norm_input(), channel_yaw->norm_input(), channel_throttle->get_control_in_zero_dz()*0.001f);
     //gcs().send_text(MAV_SEVERITY_INFO, "pilot's inputs to motors roll: %d, pitch: %d, yaw: %d, throttle: %d", channel_roll->get_radio_in(), channel_pitch->get_radio_in(), channel_yaw->get_radio_in(), channel_throttle->get_radio_in());
 }
