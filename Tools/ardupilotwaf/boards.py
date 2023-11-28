@@ -799,6 +799,7 @@ class sitl(Board):
         # whitelist of compilers which we should build with -Werror
         gcc_whitelist = frozenset([
                 ('11','3','0'),
+                ('11','4','0'),
                 ('12','1','0'),
             ])
 
@@ -1144,7 +1145,8 @@ class chibios(Board):
         ]
 
         env.INCLUDES += [
-            cfg.srcnode.find_dir('libraries/AP_GyroFFT/CMSIS_5/include').abspath()
+            cfg.srcnode.find_dir('libraries/AP_GyroFFT/CMSIS_5/include').abspath(),
+            cfg.srcnode.find_dir('modules/ChibiOS/ext/lwip/src/include/compat/posix').abspath()
         ]
 
         # whitelist of compilers which we should build with -Werror
@@ -1155,6 +1157,7 @@ class chibios(Board):
             ('9','3','1'),
             ('10','2','1'),
             ('11','3','0'),
+            ('11','4','0'),
         ])
 
         if cfg.env.HAL_CANFD_SUPPORTED:
