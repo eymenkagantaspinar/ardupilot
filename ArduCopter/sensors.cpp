@@ -6,6 +6,8 @@ void Copter::read_barometer(void)
     barometer.update();
 
     baro_alt = barometer.get_altitude() * 100.0f;
+
+    //gcs().send_text(MAV_SEVERITY_INFO, "barometer altitude(cm): %ld", baro_alt);
 }
 
 void Copter::init_rangefinder(void)
