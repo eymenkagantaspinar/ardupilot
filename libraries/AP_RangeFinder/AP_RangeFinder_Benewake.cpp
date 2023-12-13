@@ -22,6 +22,8 @@
 
 #include <ctype.h>
 
+//#include <GCS_MAVLink/GCS.h>
+
 extern const AP_HAL::HAL& hal;
 
 #define BENEWAKE_FRAME_HEADER 0x59
@@ -123,6 +125,7 @@ bool AP_RangeFinder_Benewake::get_reading(float &reading_m)
     if (count > 0) {
         // return average distance of readings
         reading_m = (sum_cm * 0.01f) / count;
+        //gcs().send_text(MAV_SEVERITY_INFO, "distance: %f", reading_m);
         return true;
     }
 
