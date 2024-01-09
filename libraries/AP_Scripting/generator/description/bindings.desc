@@ -76,6 +76,19 @@ singleton AP_Arming method set_aux_auth_failed void uint8_t'skip_check string
 
 include AP_BattMonitor/AP_BattMonitor.h
 
+include AP_BattMonitor/AP_BattMonitor_Scripting.h
+userdata BattMonitorScript_State depends AP_BATTERY_SCRIPTING_ENABLED == 1
+userdata BattMonitorScript_State field healthy boolean write
+userdata BattMonitorScript_State field voltage float'skip_check write
+userdata BattMonitorScript_State field cell_count uint8_t'skip_check write
+userdata BattMonitorScript_State field capacity_remaining_pct uint8_t'skip_check write
+userdata BattMonitorScript_State field cell_voltages'array int(ARRAY_SIZE(ud->cell_voltages)) uint16_t'skip_check write
+userdata BattMonitorScript_State field cycle_count uint16_t'skip_check write
+userdata BattMonitorScript_State field current_amps float'skip_check write
+userdata BattMonitorScript_State field consumed_mah float'skip_check write
+userdata BattMonitorScript_State field consumed_wh float'skip_check write
+userdata BattMonitorScript_State field temperature float'skip_check write
+
 singleton AP_BattMonitor rename battery
 singleton AP_BattMonitor depends (!defined(HAL_BUILD_AP_PERIPH) || defined(HAL_PERIPH_ENABLE_BATTERY))
 singleton AP_BattMonitor method num_instances uint8_t
@@ -93,6 +106,7 @@ singleton AP_BattMonitor method get_temperature boolean float'Null uint8_t 0 ud-
 singleton AP_BattMonitor method get_cycle_count boolean uint8_t 0 ud->num_instances() uint16_t'Null
 singleton AP_BattMonitor method reset_remaining boolean uint8_t 0 ud->num_instances() float 0 100
 singleton AP_BattMonitor method get_cell_voltage boolean uint8_t'skip_check uint8_t'skip_check float'Null
+singleton AP_BattMonitor method handle_scripting boolean uint8_t'skip_check BattMonitorScript_State
 
 include AP_GPS/AP_GPS.h
 
@@ -200,18 +214,35 @@ singleton AP_Proximity method get_backend AP_Proximity_Backend uint8_t'skip_chec
 include AP_RangeFinder/AP_RangeFinder.h
 include AP_RangeFinder/AP_RangeFinder_Backend.h
 
+userdata RangeFinder::RangeFinder_State depends (!defined(HAL_BUILD_AP_PERIPH) || defined(HAL_PERIPH_ENABLE_RANGEFINDER))
+userdata RangeFinder::RangeFinder_State rename RangeFinder_State
+userdata RangeFinder::RangeFinder_State field last_reading_ms uint32_t'skip_check read write
+userdata RangeFinder::RangeFinder_State field last_reading_ms rename last_reading
+userdata RangeFinder::RangeFinder_State field status RangeFinder::Status'enum read write RangeFinder::Status::NotConnected RangeFinder::Status::Good
+userdata RangeFinder::RangeFinder_State field range_valid_count uint8_t'skip_check read write
+userdata RangeFinder::RangeFinder_State field distance_m float'skip_check read write
+userdata RangeFinder::RangeFinder_State field distance_m rename distance
+userdata RangeFinder::RangeFinder_State field signal_quality_pct int8_t'skip_check read write
+userdata RangeFinder::RangeFinder_State field signal_quality_pct rename signal_quality
+userdata RangeFinder::RangeFinder_State field voltage_mv uint16_t'skip_check read write
+userdata RangeFinder::RangeFinder_State field voltage_mv rename voltage
+
 ap_object AP_RangeFinder_Backend depends (!defined(HAL_BUILD_AP_PERIPH) || defined(HAL_PERIPH_ENABLE_RANGEFINDER))
 ap_object AP_RangeFinder_Backend method distance float
+ap_object AP_RangeFinder_Backend method signal_quality_pct float
+ap_object AP_RangeFinder_Backend method signal_quality_pct rename signal_quality
 ap_object AP_RangeFinder_Backend method orientation Rotation'enum
 ap_object AP_RangeFinder_Backend method type uint8_t
 ap_object AP_RangeFinder_Backend method status uint8_t
-ap_object AP_RangeFinder_Backend method handle_script_msg boolean float'skip_check
+ap_object AP_RangeFinder_Backend manual handle_script_msg lua_range_finder_handle_script_msg 1
+ap_object AP_RangeFinder_Backend method get_state void RangeFinder::RangeFinder_State'Ref
 
 singleton RangeFinder depends (!defined(HAL_BUILD_AP_PERIPH) || defined(HAL_PERIPH_ENABLE_RANGEFINDER))
 singleton RangeFinder rename rangefinder
 singleton RangeFinder method num_sensors uint8_t
 singleton RangeFinder method has_orientation boolean Rotation'enum ROTATION_NONE ROTATION_MAX-1
 singleton RangeFinder method distance_cm_orient uint16_t Rotation'enum ROTATION_NONE ROTATION_MAX-1
+singleton RangeFinder method signal_quality_pct_orient int8_t Rotation'enum ROTATION_NONE ROTATION_MAX-1
 singleton RangeFinder method max_distance_cm_orient uint16_t Rotation'enum ROTATION_NONE ROTATION_MAX-1
 singleton RangeFinder method min_distance_cm_orient uint16_t Rotation'enum ROTATION_NONE ROTATION_MAX-1
 singleton RangeFinder method ground_clearance_cm_orient uint16_t Rotation'enum ROTATION_NONE ROTATION_MAX-1
@@ -454,6 +485,8 @@ singleton AP_Mission method cmd_has_location boolean uint16_t'skip_check
 singleton AP_Mission method jump_to_tag boolean uint16_t 0 UINT16_MAX
 singleton AP_Mission method get_index_of_jump_tag uint16_t uint16_t 0 UINT16_MAX
 singleton AP_Mission method get_last_jump_tag boolean uint16_t'Null uint16_t'Null
+singleton AP_Mission method jump_to_landing_sequence boolean
+singleton AP_Mission method jump_to_abort_landing_sequence boolean
 
 
 userdata mavlink_mission_item_int_t depends AP_MISSION_ENABLED

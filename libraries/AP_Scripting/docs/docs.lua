@@ -1799,6 +1799,14 @@ function mission:get_index_of_jump_tag(tag) end
 function mission:get_last_jump_tag() end
 
 
+-- Jump the mission to the start of the closest landing sequence. Returns true if one was found
+---@return boolean
+function mission:jump_to_landing_sequence() end
+
+-- Jump to the landing abort sequence
+-- @return boolean
+function mission:jump_to_abort_landing_sequence() end
+
 -- desc
 ---@class param
 param = {}
@@ -2517,14 +2525,71 @@ function terrain:status() end
 ---@return boolean
 function terrain:enabled() end
 
+
+-- RangeFinder state structure
+---@class RangeFinder_State_ud
+local RangeFinder_State_ud = {}
+
+---@return RangeFinder_State_ud
+function RangeFinder_State() end
+
+-- get system time (ms) of last successful update from sensor
+---@return number
+function RangeFinder_State_ud:last_reading() end
+
+-- set system time (ms) of last successful update from sensor
+---@param value number
+function RangeFinder_State_ud:last_reading(value) end
+
+-- get sensor status
+---@return number
+function RangeFinder_State_ud:status() end
+
+-- set sensor status
+---@param value number
+function RangeFinder_State_ud:status(value) end
+
+-- get number of consecutive valid readings (max out at 10)
+---@return number
+function RangeFinder_State_ud:range_valid_count() end
+
+-- set number of consecutive valid readings (max out at 10)
+---@param value number
+function RangeFinder_State_ud:range_valid_count(value) end
+
+-- get distance in meters
+---@return number
+function RangeFinder_State_ud:distance() end
+
+-- set distance in meters
+---@param value number
+function RangeFinder_State_ud:distance(value) end
+
+-- get measurement quality in percent 0-100, -1 -> quality is unknown
+---@return number
+function RangeFinder_State_ud:signal_quality() end
+
+-- set measurement quality in percent 0-100, -1 -> quality is unknown
+---@param value number
+function RangeFinder_State_ud:signal_quality(value) end
+
+-- get voltage in millivolts, if applicable, otherwise 0
+---@return number
+function RangeFinder_State_ud:voltage() end
+
+-- set voltage in millivolts, if applicable, otherwise 0
+---@param value number
+function RangeFinder_State_ud:voltage(value) end
+
+
 -- RangeFinder backend
 ---@class AP_RangeFinder_Backend_ud
 local AP_RangeFinder_Backend_ud = {}
 
--- Send distance to lua rangefinder backend. Returns false if failed
----@param distance number
+-- Send range finder measurement to lua rangefinder backend. Returns false if failed
+---@param state RangeFinder_State_ud|number
 ---@return boolean
-function AP_RangeFinder_Backend_ud:handle_script_msg(distance) end
+function AP_RangeFinder_Backend_ud:handle_script_msg(state) end
 
 -- Status of this rangefinder instance
 ---@return integer
@@ -2541,6 +2606,15 @@ function AP_RangeFinder_Backend_ud:orientation() end
 -- Current distance of the sensor instance
 ---@return number
 function AP_RangeFinder_Backend_ud:distance() end
+
+-- Current distance measurement signal_quality of the sensor instance
+---@return number
+function AP_RangeFinder_Backend_ud:signal_quality() end
+
+-- State of most recent range finder measurment
+---@return RangeFinder_State_ud
+function AP_RangeFinder_Backend_ud:get_state() end
+
 
 -- desc
 ---@class rangefinder
@@ -2585,6 +2659,11 @@ function rangefinder:max_distance_cm_orient(orientation) end
 ---@param orientation integer
 ---@return integer
 function rangefinder:distance_cm_orient(orientation) end
+
+-- Current distance measurement signal quality for range finder at this orientation
+---@param orientation integer
+---@return integer
+function rangefinder:signal_quality_pct_orient(orientation) end
 
 -- desc
 ---@param orientation integer
@@ -2791,10 +2870,63 @@ function gps:primary_sensor() end
 ---@return integer
 function gps:num_sensors() end
 
+-- desc
+---@class BattMonitorScript_State_ud
+local BattMonitorScript_State_ud = {}
+
+---@return BattMonitorScript_State_ud
+function BattMonitorScript_State() end
+
+-- set field
+---@param value number
+function BattMonitorScript_State_ud:temperature(value) end
+
+-- set field
+---@param value number
+function BattMonitorScript_State_ud:consumed_wh(value) end
+
+-- set field
+---@param value number
+function BattMonitorScript_State_ud:consumed_mah(value) end
+
+-- set field
+---@param value number
+function BattMonitorScript_State_ud:current_amps(value) end
+
+-- set field
+---@param value integer
+function BattMonitorScript_State_ud:cycle_count(value) end
+
+-- set array field
+---@param index integer
+---@param value integer
+function BattMonitorScript_State_ud:cell_voltages(index, value) end
+
+-- set field
+---@param value integer
+function BattMonitorScript_State_ud:capacity_remaining_pct(value) end
+
+-- set field
+---@param value integer
+function BattMonitorScript_State_ud:cell_count(value) end
+
+-- set field
+---@param value number
+function BattMonitorScript_State_ud:voltage(value) end
+
+-- set field
+---@param value boolean
+function BattMonitorScript_State_ud:healthy(value) end
 
 -- desc
 ---@class battery
 battery = {}
+
+-- desc
+---@param idx integer
+---@param state BattMonitorScript_State_ud
+---@return boolean
+function battery:handle_scripting(idx, state) end
 
 -- desc
 ---@param instance integer
