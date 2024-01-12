@@ -89,7 +89,7 @@ bool AP_RangeFinder_NRA24_CAN::handle_frame(AP_HAL::CANFrame &frame)
         {
             const float dist_m = ( (float)(frame.data[1]*32) + (float)(frame.data[2] >> 3) ) * 0.2 - 500;
             accumulate_distance_m(dist_m);
-            gcs().send_text(MAV_SEVERITY_INFO, "Distance from MR72: %f", dist_m);
+            //gcs().send_text(MAV_SEVERITY_INFO, "Distance from MR72: %f", dist_m);
         }
             break;
         /////////////////////////////////////////////
