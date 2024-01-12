@@ -6,6 +6,8 @@
 #include <AP_BoardConfig/AP_BoardConfig.h>
 #include <AP_HAL/AP_HAL.h>
 
+//#include "../GCS_MAVLink/GCS.h"
+
 RangeFinder_MultiCAN *AP_RangeFinder_NRA24_CAN::multican_NRA24;
 
 // constructor
@@ -40,10 +42,12 @@ void AP_RangeFinder_NRA24_CAN::update(void)
         if (AP_HAL::millis() - last_heartbeat_ms > read_timeout_ms()) {
             // no heartbeat, must be disconnected
             set_status(RangeFinder::Status::NotConnected);
+            //gcs().send_text(MAV_SEVERITY_INFO, "no heartbeat, must be disconnected");
         } else {
             // Have heartbeat, just no data. Probably because this sensor doesn't output data when there is no relative motion infront of the radar.
             // This case has special pre-arm check handling
             set_status(RangeFinder::Status::NoData);
+            //gcs().send_text(MAV_SEVERITY_INFO, "Have heartbeat, just no data");
         }
     }
 }
@@ -62,6 +66,7 @@ bool AP_RangeFinder_NRA24_CAN::handle_frame(AP_HAL::CANFrame &frame)
         case 0xAU:
             // heart beat in the form of Radar Status. The contents of this message aren't really useful so we won't parse them for now
             last_heartbeat_ms = AP_HAL::millis();
+            //gcs().send_text(MAV_SEVERITY_INFO, "Heartrbeat coming");
             break;
 
         case 0xCU:
@@ -75,6 +80,7 @@ bool AP_RangeFinder_NRA24_CAN::handle_frame(AP_HAL::CANFrame &frame)
                 return false;
             }
             accumulate_distance_m(dist_m);
+            //gcs().send_text(MAV_SEVERITY_INFO, "Distance: %f", dist_m);
         }
             break;
 
