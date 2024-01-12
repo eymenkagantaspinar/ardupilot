@@ -83,6 +83,16 @@ bool AP_RangeFinder_NRA24_CAN::handle_frame(AP_HAL::CANFrame &frame)
             //gcs().send_text(MAV_SEVERITY_INFO, "Distance: %f", dist_m);
         }
             break;
+        
+        /////////////// MR72 CASE ///////////////
+        case 0xBU:
+        {
+            const float dist_m = ( (float)(frame.data[1]*32) + (float)(frame.data[2] >> 3) ) * 0.2 - 500;
+            accumulate_distance_m(dist_m);
+            gcs().send_text(MAV_SEVERITY_INFO, "Distance from MR72: %f", dist_m);
+        }
+            break;
+        /////////////////////////////////////////////
 
         default:
             // not parsing these messages
