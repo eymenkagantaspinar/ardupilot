@@ -86,10 +86,15 @@ bool AP_RangeFinder_NRA24_CAN::handle_frame(AP_HAL::CANFrame &frame)
         
         /////////////// MR72 CASE ///////////////
         case 0xBU:
-        {
-            const float dist_m = ( (float)(frame.data[1]*32) + (float)(frame.data[2] >> 3) ) * 0.2 - 500;
-            accumulate_distance_m(dist_m);
-            //gcs().send_text(MAV_SEVERITY_INFO, "Distance from MR72: %f", dist_m);
+        {  
+            const float dist_m = ( (float)(frame.data[1]*32) + (float)(frame.data[2] >> 3) ) * 0.2 - 500;  /// 
+            //const float dist_m1 = ( (float)(frame.data[2] & 0x07) * 256 + (float)frame.data[3]) * 0.2 - 204.6;
+            if ( 2 == ((frame.data[6] >> 3) & 0x03)) {       
+                accumulate_distance_m(dist_m);
+                //accumulate_distance_m(dist_m1);
+                gcs().send_text(MAV_SEVERITY_INFO, "Distance from MR72: %f", dist_m);
+                //gcs().send_text(MAV_SEVERITY_INFO, "Distance from MR72: %f", dist_m1);
+            }
         }
             break;
         /////////////////////////////////////////////
